@@ -20,6 +20,18 @@ class effects:
     'cyan': '\033[96m',
   }
 
+def effect_by_ext(ext):
+  ext_effects = {
+    'mp3': effects.colors['blue'],
+    'jpg': effects.colors['yellow'],
+    'jpeg': effects.colors['yellow'],
+  }
+
+  if not ext in ext_effects:
+    return effects.colors['grey']
+
+  return ext_effects[ext]
+
 def list(dir_path, offset = 0, depth = None):
   if depth is 0:
     return
@@ -27,11 +39,12 @@ def list(dir_path, offset = 0, depth = None):
   for subfile_name in os.listdir(dir_path):
     subfile_path = os.path.join(dir_path, subfile_name)
     is_subfile_dir = os.path.isdir(subfile_path)
+    effect = effects.bold if is_subfile_dir else effect_by_ext(os.path.splitext(subfile_name)[1][1:].lower())
 
     for i in range(0, offset):
       print('  ', end='')
 
-    print((effects.bold if is_subfile_dir else effects.colors['grey']) + subfile_name + effects.end)
+    print(effect + subfile_name + effects.end)
 
     if is_subfile_dir:
       list(subfile_path, offset + 1, None if depth is None else (depth - 1))
