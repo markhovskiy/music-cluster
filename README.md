@@ -4,13 +4,18 @@ a set of cli utilities for dealing with a local music collection
 
 ### usage
 
-```bash
-python3 list.py [--depth <depth>]
+``` bash
+python3 list.py [-h] [-d DEPTH] [-p PATH]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d DEPTH, --depth DEPTH
+                        restricts subfolders level
+  -p PATH, --path PATH  defines path to list in, defaults to current dir
 ```
 
 ### todo
 
-* accept paths to restrict listings
 * utilize "mutagen" to print tags data
 * introduce file-based configs for patterns, colors etc.
 * add renaming capabilities (by patterns)

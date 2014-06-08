@@ -3,10 +3,13 @@ import os
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-d', '--depth', type=int, help='restricts subfolders level')
+parser.add_argument('-d', '--depth', type=int,
+                    help='restricts subfolders level')
+parser.add_argument('-p', '--path',
+                    help='defines path to list in, defaults to current dir')
 args = parser.parse_args()
 
-root_dir = os.path.expanduser(os.path.join('~', 'Music'))
+root_dir = os.path.abspath(args.path) if args.path else os.getcwd()
 if not os.path.exists(root_dir):
   sys.exit('Path not found: ' + root_dir)
 
