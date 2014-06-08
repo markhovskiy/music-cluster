@@ -5,8 +5,7 @@ a set of cli utilities for dealing with a local music collection
 ### usage
 
 ```bash
-python3 list.py [depth]
-
+python3 list.py [--depth <depth>]
 ```
 
 ### todo
