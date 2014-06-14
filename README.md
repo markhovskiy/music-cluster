@@ -12,7 +12,9 @@ optional arguments:
   -d DEPTH, --depth DEPTH
                         restricts subfolders level
   -p PATH, --path PATH  defines path to list in, defaults to current dir
+  -c, --color           whether to color files by extensions
 ```
+e.g. `python3 list.py -c -d 2 -p ~/Music/`
 
 ### todo
 
