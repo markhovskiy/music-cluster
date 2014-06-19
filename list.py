@@ -2,14 +2,15 @@ import sys
 import os
 import argparse
 import effects
+from mutagen.mp3 import MP3
 
 parser = argparse.ArgumentParser()
+parser.add_argument('-c', '--color', action='store_true',
+                    help='whether to color files by extensions')
 parser.add_argument('-d', '--depth', type=int,
                     help='restricts subfolders level')
 parser.add_argument('-p', '--path',
                     help='defines path to list in, defaults to current dir')
-parser.add_argument('-c', '--color', action='store_true',
-                    help='whether to color files by extensions')
 args = parser.parse_args()
 
 root_dir = os.path.abspath(args.path) if args.path else os.getcwd()
