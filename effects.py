@@ -18,5 +18,11 @@ ext_colors = {
   'jpeg': 'yellow',
 }
 
+def print_with_effect(text, effect):
+  effect_code = effect_codes['colors'][effect] if effect in effect_codes['colors'] else effect_codes.get(effect, '')
+  print('{start}{text}{end}'.format(start=effect_code,
+                                    text=text,
+                                    end=effect_codes['end']))
+
 def get_ext_color(ext):
-  return effect_codes['colors'][ext_colors.get(ext, 'grey')]
+  return ext_colors.get(ext, 'grey')
