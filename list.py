@@ -1,10 +1,9 @@
 from __future__ import print_function
-import re
 import sys
 import os
 import argparse
-import effects
 from mutagen.mp3 import MP3
+import effects
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-c', '--color', action='store_true',
@@ -24,12 +23,13 @@ if not os.path.exists(root_dir):
 def get_file_ext(file_name):
   return os.path.splitext(file_name)[1][1:].lower()
 
-def print_file_tags(file_path):
+def print_file_tags(file_path, separator = ' | '):
   audio = MP3(file_path)
 
+  # (artist, year, album, title)
   for frame in ('TPE1', 'TDRC', 'TALB', 'TIT2'):
     if frame in audio:
-      print(audio[frame].text[0], end=' ')
+      print(audio[frame].text[0], end=separator)
 
 def print_file_data(file_path, file_name, is_subfile_dir):
   file_ext = get_file_ext(file_name)
