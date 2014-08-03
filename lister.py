@@ -12,7 +12,9 @@ class Lister:
     'TPE1', # artist
     'TDRC', # year
     'TALB', # album
-    'TIT2'  # title
+    'TCON', # genre
+    'TRCK', # track number
+    'TIT2', # title
   )
 
   tag_separator = ' | '
@@ -24,12 +26,20 @@ class Lister:
   def get_file_ext(self, file_name):
     return os.path.splitext(file_name)[1][1:].lower()
 
+  def format_duration(self, duration):
+    mins = "{0:.0f}".format(round(duration / 60))
+    secs = "{0:.0f}".format(round(duration % 60))
+    return "{0}:{1}".format(mins,
+                            secs if len(secs) == 2 else "0{0}".format(secs))
+
   def print_file_tags(self, file_path):
     audio = MP3(file_path)
 
     for frame in self.tag_frames:
       if frame in audio:
         print(audio[frame].text[0], end=self.tag_separator)
+
+    print(self.format_duration(audio.info.length), end=self.tag_separator)
 
   def print_file_data(self, file_path, file_name, is_dir):
     file_ext = self.get_file_ext(file_name)
