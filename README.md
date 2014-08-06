@@ -62,11 +62,11 @@ Between the Buried and Me | 2006 | Alaska | Metal | 2 | Alaska | 4:58 | Alaska.m
 
 * align output by pretty columns
 * normalize track numbers output
-* add functionality for checking a file tree against tags (e.g. "<artist>" -> "<year> - <album>" -> "<track number> - <title>.mp3")
+* add functionality for checking a file tree against tags (e.g. `"<artist>" -> "<year> - <album>" -> "<track number> - <title>.mp3"`)
 * introduce file-based configs for patterns, colors etc.
 * add renaming capabilities (by patterns)
 * add search capabilities
-* take advantage of last.fm stats
+* take advantage of last.fm stats (e.g. http://www.last.fm/api/show/track.getTags)
 
 ### links
 
