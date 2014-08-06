@@ -23,7 +23,7 @@ optional arguments:
                         restricts subfolders level
   -p PATH, --path PATH  defines path to list in, defaults to current dir
 ```
-e.g. `python list.py -c -t -d 1 -p ~/Music/` will print something like:
+e.g. `python list.py -c -t -d 3 -p ~/Music/` will print something like:
 ```
 Обiйми дощу
   2010 - Свiтанок
@@ -61,6 +61,8 @@ Between the Buried and Me | 2006 | Alaska | Metal | 2 | Alaska | 4:58 | Alaska.m
 ### todo
 
 * align output by pretty columns
+* normalize track numbers output
+* add functionality for checking a file tree against tags (e.g. "<artist>" -> "<year> - <album>" -> "<track number> - <title>.mp3")
 * introduce file-based configs for patterns, colors etc.
 * add renaming capabilities (by patterns)
 * add search capabilities
