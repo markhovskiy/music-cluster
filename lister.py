@@ -87,10 +87,11 @@ class Lister:
       print(file_data['file_name'])
 
   def list(self, dir_path, offset=0, depth=None):
-    """Print file/folder data recursively
+    """
+    Prints file/folder data recursively
 
-       To have all tags printed in columns (by folders):
-       collecting each file data and printing all of them afterwards.
+    To have all tags printed in columns (by folders):
+    collecting each file data and printing all of them afterwards.
     """
 
     if depth == 0:
@@ -122,5 +123,6 @@ class Lister:
 
         files.append(file_data)
 
+    folder_tags_width = self.max_tags_width(files)
     for file_data in files:
-      self.print_file_data(file_data, offset, self.max_tags_width(files))
+      self.print_file_data(file_data, offset, folder_tags_width)
