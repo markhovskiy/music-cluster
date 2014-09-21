@@ -26,14 +26,16 @@ optional arguments:
 e.g. `python list.py -p ~/Music/ -c -t` will print something like:
 ![screenshot](https://raw.githubusercontent.com/markhovskiy/markhovskiy.github.io/master/uploads/music_cluster_screenshot.png)
 
-### todo
+### features/todo
 
-* order by file name
-* add functionality for checking a file tree against tags (e.g. `"<artist>" -> "<year> - <album>" -> "<track number> - <title>.mp3"`)
-* introduce file-based configs for patterns, colors etc.
-* add renaming capabilities (by patterns)
-* add search capabilities
-* take advantage of last.fm stats (e.g. http://www.last.fm/api/show/track.getTags)
+- [x] print tree view of a folder (restrict depth, order subfiles by name)
+- [x] use colors for file types
+- [x] print tags table
+- [ ] add functionality for checking a file tree against tags (e.g. `"<artist>" -> "<year> - <album>" -> "<track number> - <title>.mp3"`)
+- [ ] introduce file-based configs for patterns, colors etc.
+- [ ] add renaming capabilities (by patterns)
+- [ ] add search capabilities
+- [ ] take advantage of last.fm stats (e.g. http://www.last.fm/api/show/track.getTags)
 
 ### links
 

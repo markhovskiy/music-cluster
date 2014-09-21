@@ -99,11 +99,10 @@ class Lister:
 
     files = []
 
-    for file_name in os.listdir(dir_path):
+    for file_name in sorted(os.listdir(dir_path)):
       file_path = os.path.join(dir_path, file_name)
-      is_dir = os.path.isdir(file_path)
 
-      if is_dir:
+      if os.path.isdir(file_path):
         self.print_offset(offset)
         effects.print_with_effect(file_name, 'bold')
 
