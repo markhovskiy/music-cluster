@@ -13,7 +13,7 @@ then just `workon music-cluster`
 ### usage
 
 ``` bash
-python list.py [-h] [-c] [-d DEPTH] [-p PATH]
+python list.py [-h] [-c] [-t] [-d DEPTH] [-p PATH]
 
 optional arguments:
   -h, --help            show this help message and exit

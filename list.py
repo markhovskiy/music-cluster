@@ -1,7 +1,9 @@
 import sys
 import os
 import argparse
+
 from lister import Lister
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-c', '--color', action='store_true',
@@ -16,7 +18,7 @@ args = parser.parse_args()
 
 root_dir = os.path.abspath(args.path) if args.path else os.getcwd()
 if not os.path.exists(root_dir):
-  sys.exit('Path not found: ' + root_dir)
+  sys.exit("Path not found: {}".format(root_dir))
 
 lister = Lister(args.color, args.tags)
 lister.list(root_dir, 0, args.depth)

@@ -1,7 +1,11 @@
 from __future__ import print_function
 import os
+import re
+
 from mutagen.mp3 import MP3
+
 import effects
+
 
 class Lister:
   # number of spaces to indent (marking nesting)
@@ -38,12 +42,13 @@ class Lister:
 
     for frame in self.tag_frames:
       if frame in audio:
-        # normalizing to strings (e.g. 'TDRC' is stored as 'ID3TimeStamp')
+        # normalizing to strings (e.g. "TDRC" is stored as "ID3TimeStamp")
         tag = u"{}".format(audio[frame].text[0])
 
-        # could be in "current/total" format
+        # taking only "current" part if value appears in "current/total" format
+        # and removing preceding zeros
         if frame == 'TRCK':
-          tag = tag.split('/')[0]
+          tag = re.sub('^0*|/.*', "", tag)
 
         tags[frame] = tag
 
@@ -66,13 +71,14 @@ class Lister:
     return tags_width
 
   def print_file_tags(self, tags, tags_width):
-    for frame in self.tag_frames:
-      print(u"{0:<{width}}".format(tags.get(frame, ''),
-                                   width=tags_width.get(frame, 0)),
+    for frame in self.tag_frames + ('duration',):
+      print(u"{0:{align}{width}}".format(tags.get(frame, ""),
+                                         align='>' if frame in ('TRCK', 'duration') else '<',
+                                         width=tags_width.get(frame, 0)),
             end=self.tag_separator)
 
   def print_offset(self, offset):
-    print(' ' * self.offset_width * offset, end='')
+    print(" " * self.offset_width * offset, end="")
 
   def print_file_data(self, file_data, offset, tags_width):
     self.print_offset(offset)
@@ -111,11 +117,8 @@ class Lister:
                   None if depth is None else (depth - 1))
       else:
         file_ext = self.get_file_ext(file_name)
-
-        file_data = {
-          'file_name': file_name,
-          'file_ext': file_ext,
-        }
+        file_data = dict(file_name=file_name,
+                         file_ext=file_ext)
 
         if self.to_print_tags and file_ext.lower() == 'mp3':
           file_data['tags'] = self.collect_file_tags(file_path)
