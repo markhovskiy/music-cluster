@@ -12,18 +12,14 @@ effect_codes = {
   }
 }
 
-ext_colors = {
-  'mp3': 'blue',
-  'jpg': 'yellow',
-  'jpeg': 'yellow',
-}
-
 def print_with_effect(text, effect):
   effect_code = effect_codes['colors'].get(effect,
                                            effect_codes.get(effect, ''))
-  print('{start}{text}{end}'.format(start=effect_code,
+  print("{start}{text}{end}".format(start=effect_code,
                                     text=text,
                                     end=effect_codes['end']))
 
 def get_ext_color(ext):
-  return ext_colors.get(ext, 'grey')
+  return dict(mp3='blue',
+              jpg='yellow',
+              jpeg='yellow').get(ext, 'grey')
