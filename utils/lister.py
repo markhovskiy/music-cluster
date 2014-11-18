@@ -21,7 +21,7 @@ class Lister:
     'TIT2', # title
   )
 
-  tag_separator = ' | '
+  tag_separator = effects.wrap(" | ", 'grey')
 
   def __init__(self, to_color, to_print_tags):
     self.to_color = to_color
@@ -87,8 +87,8 @@ class Lister:
       self.print_file_tags(file_data['tags'], tags_width)
 
     if self.to_color:
-      effects.print_with_effect(file_data['file_name'],
-                                effects.get_ext_color(file_data['file_ext']))
+      print(effects.wrap(file_data['file_name'],
+                         effects.get_ext_color(file_data['file_ext'])))
     else:
       print(file_data['file_name'])
 
@@ -110,7 +110,7 @@ class Lister:
 
       if os.path.isdir(file_path):
         self.print_offset(offset)
-        effects.print_with_effect(file_name, 'bold')
+        print(effects.wrap(file_name, 'bold'))
 
         self.list(file_path,
                   offset + 1,
