@@ -21,20 +21,51 @@ class Lister:
     'TIT2', # title
   )
 
-  tag_separator = effects.wrap(" | ", 'grey')
-
-  def __init__(self, to_color, to_print_tags):
-    self.to_color = to_color
+  def __init__(self, to_disable_effects, to_print_tags):
+    self.effects_enabled = not to_disable_effects
     self.to_print_tags = to_print_tags
+    self.tag_separator = self.apply_effect(" | ", 'grey')
 
-  def get_file_ext(self, file_name):
-    return os.path.splitext(file_name)[1][1:].lower()
+  def list(self, dir_path, offset=0, depth=None):
+    """
+    Prints file/folder data recursively
 
-  def format_duration(self, duration):
-    mins = "{0:.0f}".format(round(duration / 60))
-    secs = "{0:.0f}".format(round(duration % 60))
-    return "{0}:{1}".format(mins,
-                            secs if len(secs) == 2 else "0{0}".format(secs))
+    To have all tags printed in columns (by folders):
+    collecting each file data and printing all of them afterwards.
+    """
+
+    if depth == 0:
+      return
+
+    files = []
+
+    for file_name in sorted(os.listdir(dir_path)):
+      file_path = os.path.join(dir_path, file_name)
+
+      if os.path.isdir(file_path):
+        self.print_offset(offset)
+        print(self.apply_effect(file_name, 'bold'))
+
+        self.list(file_path,
+                  offset + 1,
+                  None if depth is None else (depth - 1))
+      else:
+        file_ext = os.path.splitext(file_name)[1][1:].lower()
+        file_data = dict(file_name=file_name,
+                         file_ext=file_ext)
+
+        if self.to_print_tags and file_ext == 'mp3':
+          file_data['tags'] = self.collect_file_tags(file_path)
+
+        files.append(file_data)
+
+    folder_tags_width = self.max_tags_width(files)
+    for file_data in files:
+      self.print_offset(offset)
+      self.print_file_data(file_data, folder_tags_width)
+
+  def apply_effect(self, text, effect):
+    return effects.wrap(text, effect) if self.effects_enabled else text
 
   def collect_file_tags(self, file_path):
     audio = MP3(file_path)
@@ -56,6 +87,12 @@ class Lister:
 
     return tags
 
+  def format_duration(self, duration):
+    mins = "{0:.0f}".format(round(duration / 60))
+    secs = "{0:.0f}".format(round(duration % 60))
+    return "{0}:{1}".format(mins,
+                            secs if len(secs) == 2 else "0{0}".format(secs))
+
   def max_tags_width(self, files):
     tags_width = {}
 
@@ -70,61 +107,19 @@ class Lister:
 
     return tags_width
 
+  def print_offset(self, offset):
+    print(" " * self.offset_width * offset, end="")
+
+  def print_file_data(self, file_data, tags_width):
+    if 'tags' in file_data:
+      self.print_file_tags(file_data['tags'], tags_width)
+
+    print(self.apply_effect(file_data['file_name'],
+                            effects.get_ext_color(file_data['file_ext'])))
+
   def print_file_tags(self, tags, tags_width):
     for frame in self.tag_frames + ('duration',):
       print(u"{0:{align}{width}}".format(tags.get(frame, ""),
                                          align='>' if frame in ('TRCK', 'duration') else '<',
                                          width=tags_width.get(frame, 0)),
             end=self.tag_separator)
-
-  def print_offset(self, offset):
-    print(" " * self.offset_width * offset, end="")
-
-  def print_file_data(self, file_data, offset, tags_width):
-    self.print_offset(offset)
-
-    if 'tags' in file_data:
-      self.print_file_tags(file_data['tags'], tags_width)
-
-    if self.to_color:
-      print(effects.wrap(file_data['file_name'],
-                         effects.get_ext_color(file_data['file_ext'])))
-    else:
-      print(file_data['file_name'])
-
-  def list(self, dir_path, offset=0, depth=None):
-    """
-    Prints file/folder data recursively
-
-    To have all tags printed in columns (by folders):
-    collecting each file data and printing all of them afterwards.
-    """
-
-    if depth == 0:
-      return
-
-    files = []
-
-    for file_name in sorted(os.listdir(dir_path)):
-      file_path = os.path.join(dir_path, file_name)
-
-      if os.path.isdir(file_path):
-        self.print_offset(offset)
-        print(effects.wrap(file_name, 'bold'))
-
-        self.list(file_path,
-                  offset + 1,
-                  None if depth is None else (depth - 1))
-      else:
-        file_ext = self.get_file_ext(file_name)
-        file_data = dict(file_name=file_name,
-                         file_ext=file_ext)
-
-        if self.to_print_tags and file_ext.lower() == 'mp3':
-          file_data['tags'] = self.collect_file_tags(file_path)
-
-        files.append(file_data)
-
-    folder_tags_width = self.max_tags_width(files)
-    for file_data in files:
-      self.print_file_data(file_data, offset, folder_tags_width)

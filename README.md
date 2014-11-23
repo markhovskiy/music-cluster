@@ -13,17 +13,20 @@ then just `workon music-cluster`
 ### usage
 
 ``` bash
-python list.py [-h] [-c] [-t] [-d DEPTH] [-p PATH]
+python list.py [-h] [-t] [-p] [-d DEPTH] path
+
+positional arguments:
+  path                  path to list in
 
 optional arguments:
   -h, --help            show this help message and exit
-  -c, --color           whether to color files by extensions
   -t, --tags            whether to print tags
+  -p, --plain           plain text mode, effects disabled (colors, bold)
   -d DEPTH, --depth DEPTH
-                        restricts subfolders level
-  -p PATH, --path PATH  defines path to list in, defaults to current dir
+                        restricts level of subfolders
+
 ```
-e.g. `python list.py -p ~/Music/ -c -t` will print something like:
+e.g. `python list.py ~/Music/ -t` prints something like:
 ![screenshot](https://raw.githubusercontent.com/markhovskiy/markhovskiy.github.io/master/uploads/music_cluster_screenshot.png)
 
 ### features/todo
