@@ -24,7 +24,7 @@ class Lister:
   def __init__(self, to_disable_effects, to_print_tags):
     self.effects_enabled = not to_disable_effects
     self.to_print_tags = to_print_tags
-    self.tag_separator = self.apply_effect(" | ", 'grey')
+    self.tag_separator = self.__apply_effect(" | ", 'grey')
 
   def list(self, dir_path, offset=0, depth=None):
     """
@@ -43,8 +43,8 @@ class Lister:
       file_path = os.path.join(dir_path, file_name)
 
       if os.path.isdir(file_path):
-        self.print_offset(offset)
-        print(self.apply_effect(file_name, 'bold'))
+        self.__print_offset(offset)
+        print(self.__apply_effect(file_name, 'bold'))
 
         self.list(file_path,
                   offset + 1,
@@ -55,26 +55,26 @@ class Lister:
                          file_ext=file_ext)
 
         if self.to_print_tags and file_ext == 'mp3':
-          file_data['tags'] = self.collect_file_tags(file_path)
+          file_data['tags'] = self.__collect_file_tags(file_path)
 
         files.append(file_data)
 
-    folder_tags_width = self.max_tags_width(files)
+    folder_tags_width = self.__max_tags_width(files)
     for file_data in files:
-      self.print_offset(offset)
-      self.print_file_data(file_data, folder_tags_width)
+      self.__print_offset(offset)
+      self.__print_file_data(file_data, folder_tags_width)
 
-  def apply_effect(self, text, effect):
+  def __apply_effect(self, text, effect):
     return effects.wrap(text, effect) if self.effects_enabled else text
 
-  def collect_file_tags(self, file_path):
+  def __collect_file_tags(self, file_path):
     audio = MP3(file_path)
     tags = {}
 
     for frame in self.tag_frames:
       if frame in audio:
         # normalizing to strings (e.g. "TDRC" is stored as "ID3TimeStamp")
-        tag = u"{}".format(audio[frame].text[0])
+        tag = unicode(audio[frame].text[0])
 
         # taking only "current" part if value appears in "current/total" format
         # and removing preceding zeros
@@ -83,17 +83,17 @@ class Lister:
 
         tags[frame] = tag
 
-    tags['duration'] = self.format_duration(audio.info.length)
+    tags['duration'] = self.__format_duration(audio.info.length)
 
     return tags
 
-  def format_duration(self, duration):
+  def __format_duration(self, duration):
     mins = "{0:.0f}".format(round(duration / 60))
     secs = "{0:.0f}".format(round(duration % 60))
     return "{0}:{1}".format(mins,
                             secs if len(secs) == 2 else "0{0}".format(secs))
 
-  def max_tags_width(self, files):
+  def __max_tags_width(self, files):
     tags_width = {}
 
     for file_data in files:
@@ -107,19 +107,16 @@ class Lister:
 
     return tags_width
 
-  def print_offset(self, offset):
+  def __print_offset(self, offset):
     print(" " * self.offset_width * offset, end="")
 
-  def print_file_data(self, file_data, tags_width):
+  def __print_file_data(self, file_data, tags_width):
     if 'tags' in file_data:
-      self.print_file_tags(file_data['tags'], tags_width)
-
-    print(self.apply_effect(file_data['file_name'],
-                            effects.get_ext_color(file_data['file_ext'])))
-
-  def print_file_tags(self, tags, tags_width):
-    for frame in self.tag_frames + ('duration',):
-      print(u"{0:{align}{width}}".format(tags.get(frame, ""),
-                                         align='>' if frame in ('TRCK', 'duration') else '<',
-                                         width=tags_width.get(frame, 0)),
+      print(*[u"{0:{align}{width}}".format(file_data['tags'].get(frame, ""),
+                                           align='>' if frame in ('TRCK', 'duration') else '<',
+                                           width=tags_width.get(frame, 0)) for frame in self.tag_frames + ('duration',)],
+            sep=self.tag_separator,
             end=self.tag_separator)
+
+    print(self.__apply_effect(file_data['file_name'],
+                            effects.get_ext_color(file_data['file_ext'])))
