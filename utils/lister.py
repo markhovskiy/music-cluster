@@ -1,4 +1,5 @@
 from __future__ import print_function
+import math
 import os
 import re
 
@@ -20,6 +21,28 @@ class Lister:
     'TRCK', # track number
     'TIT2', # title
   )
+
+  @staticmethod
+  def format_duration(duration):
+    mins = "{0:.0f}".format(math.floor(duration / 60))
+    secs = "{0:.0f}".format(math.floor(duration % 60))
+    return "{0}:{1}".format(mins,
+                            secs if len(secs) == 2 else "0{0}".format(secs))
+
+  @staticmethod
+  def max_tags_width(files):
+    tags_width = {}
+
+    for file_data in files:
+      if 'tags' not in file_data:
+        continue
+
+      for frame in file_data['tags']:
+        width = len(file_data['tags'][frame])
+        if width > tags_width.get(frame, 0):
+          tags_width[frame] = width
+
+    return tags_width
 
   def __init__(self, to_disable_effects, to_print_tags):
     self.effects_enabled = not to_disable_effects
@@ -59,7 +82,7 @@ class Lister:
 
         files.append(file_data)
 
-    folder_tags_width = self.__max_tags_width(files)
+    folder_tags_width = self.max_tags_width(files)
     for file_data in files:
       self.__print_offset(offset)
       self.__print_file_data(file_data, folder_tags_width)
@@ -83,29 +106,9 @@ class Lister:
 
         tags[frame] = tag
 
-    tags['duration'] = self.__format_duration(audio.info.length)
+    tags['duration'] = self.format_duration(audio.info.length)
 
     return tags
-
-  def __format_duration(self, duration):
-    mins = "{0:.0f}".format(round(duration / 60))
-    secs = "{0:.0f}".format(round(duration % 60))
-    return "{0}:{1}".format(mins,
-                            secs if len(secs) == 2 else "0{0}".format(secs))
-
-  def __max_tags_width(self, files):
-    tags_width = {}
-
-    for file_data in files:
-      if 'tags' not in file_data:
-        continue
-
-      for frame in file_data['tags']:
-        width = len(file_data['tags'][frame])
-        if width > tags_width.get(frame, 0):
-          tags_width[frame] = width
-
-    return tags_width
 
   def __print_offset(self, offset):
     print(" " * self.offset_width * offset, end="")

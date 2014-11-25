@@ -1,14 +1,23 @@
 # music-cluster
 
-a set of cli utilities for dealing with a local music collection
+a cli utility for dealing with local music collections
+
 
 ### setup (dev)
 
 1. [install "virtualenvwrapper"](http://virtualenvwrapper.readthedocs.org/en/latest/install.html#basic-installation)
 2. create virtualenv for python2.7 (because mutagen can't really parse tags on python3): `mkvirtualenv --python=/usr/bin/python2.7 music-cluster`
 3. `pip install -r requirements.txt`
+4. `workon music-cluster`
 
-then just `workon music-cluster`
+
+### testing
+
+```bash
+py.test
+
+```
+
 
 ### usage
 
@@ -29,6 +38,7 @@ optional arguments:
 e.g. `python list.py ~/Music/ -t` prints something like:
 ![screenshot](https://raw.githubusercontent.com/markhovskiy/markhovskiy.github.io/master/uploads/music_cluster_screenshot.png)
 
+
 ### features/todo
 
 - [x] print tree view of a folder (restrict depth, order subfiles by name)
@@ -39,6 +49,7 @@ e.g. `python list.py ~/Music/ -t` prints something like:
 - [ ] add renaming capabilities (by patterns)
 - [ ] add search capabilities
 - [ ] take advantage of last.fm stats (e.g. http://www.last.fm/api/show/track.getTags)
+
 
 ### links
 
