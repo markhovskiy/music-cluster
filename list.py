@@ -18,7 +18,7 @@ args = parser.parse_args()
 
 root_dir = os.path.abspath(args.path)
 if not os.path.exists(root_dir):
-  sys.exit("Path not found: {}".format(root_dir))
+    sys.exit("Path not found: {}".format(root_dir))
 
 lister = Lister(args.plain, args.tags)
 lister.list(root_dir, 0, args.depth)
