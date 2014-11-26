@@ -96,11 +96,10 @@ class Lister:
 
     for frame in self.tag_frames:
       if frame in audio:
-        # normalizing to strings (e.g. "TDRC" is stored as "ID3TimeStamp")
+        # e.g. "audio['TDRC']" has "ID3TimeStamp" type
         tag = unicode(audio[frame].text[0])
 
-        # taking only "current" part if value appears in "current/total" format
-        # and removing preceding zeros
+        # removing a "total" part (in case of "current/total" format) and leading zeros
         if frame == 'TRCK':
           tag = re.sub('^0*|/.*', "", tag)
 
@@ -122,4 +121,4 @@ class Lister:
             end=self.tag_separator)
 
     print(self.__apply_effect(file_data['file_name'],
-                            effects.get_ext_color(file_data['file_ext'])))
+                              effects.get_ext_color(file_data['file_ext'])))
