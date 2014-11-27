@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from utils.lister import Lister
 
 
@@ -35,6 +36,19 @@ def test_max_tags_width():
                 'TIT2': 'From So Far Away',
                 'duration': '2:38'
             }
+        },
+        {
+            'name': '11 - Дзеці паўночнага ветру.mp3',
+            'ext': 'mp3',
+            'tags': {
+                'TPE1': 'Rokash',
+                'TDRC': '2011',
+                'TALB': u'Запалі Агонь',
+                'TCON': 'Folk',
+                'TRCK': '11',
+                'TIT2': u'Дзеці паўночнага ветру',
+                'duration': '5:11'
+            }
         }
     ]
 
@@ -44,6 +58,6 @@ def test_max_tags_width():
         'TALB': 19,
         'TCON': 17,
         'TRCK': 2,
-        'TIT2': 16,
+        'TIT2': 22,
         'duration': 5
     }
