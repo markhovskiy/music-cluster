@@ -48,7 +48,7 @@ class Lister:
     def __init__(self, to_disable_effects, to_print_tags):
         self.effects_enabled = not to_disable_effects
         self.to_print_tags = to_print_tags
-        self.tag_separator = self.__apply_effect(" | ", 'grey')
+        self.tag_separator = self.highlight(" | ", 'grey')
 
     def list(self, dir_path, offset=0, depth=None):
         """
@@ -67,8 +67,8 @@ class Lister:
             file_path = os.path.join(dir_path, file_name)
 
             if os.path.isdir(file_path):
-                self.__print_offset(offset)
-                print(self.__apply_effect(file_name, 'bold'))
+                self.print_offset(offset)
+                print(self.highlight(file_name, 'bold'))
 
                 self.list(file_path,
                           offset + 1,
@@ -78,19 +78,19 @@ class Lister:
                 file_data = dict(name=file_name, ext=file_ext)
 
                 if self.to_print_tags and file_ext == 'mp3':
-                    file_data['tags'] = self.__collect_file_tags(file_path)
+                    file_data['tags'] = self.collect_file_tags(file_path)
 
                 files.append(file_data)
 
         folder_tags_width = self.max_tags_width(files)
         for file_data in files:
-            self.__print_offset(offset)
-            self.__print_file_data(file_data, folder_tags_width)
+            self.print_offset(offset)
+            self.print_file_data(file_data, folder_tags_width)
 
-    def __apply_effect(self, text, effect):
-        return effects.wrap(text, effect) if self.effects_enabled else text
+    def highlight(self, text, *effect):
+        return effects.apply(text, *effect) if self.effects_enabled else text
 
-    def __collect_file_tags(self, file_path):
+    def collect_file_tags(self, file_path):
         audio = MP3(file_path)
         tags = {}
 
@@ -110,10 +110,10 @@ class Lister:
 
         return tags
 
-    def __print_offset(self, offset):
+    def print_offset(self, offset):
         print(" " * self.offset_width * offset, end="")
 
-    def __print_file_data(self, file_data, tags_width):
+    def print_file_data(self, file_data, tags_width):
         if 'tags' in file_data:
             for frame in self.tag_frames + ('duration',):
                 tag = file_data['tags'].get(frame, "")
@@ -122,5 +122,5 @@ class Lister:
                 print(u"{0:{1}{2}}".format(tag, align, width),
                       end=self.tag_separator)
 
-        print(self.__apply_effect(file_data['name'],
-                                  effects.get_ext_color(file_data['ext'])))
+        print(self.highlight(file_data['name'],
+                             effects.get_ext_color(file_data['ext'])))

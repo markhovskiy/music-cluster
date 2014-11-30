@@ -1,25 +1,25 @@
 # see http://en.wikipedia.org/wiki/ANSI_escape_code#Colors
-effect_codes = {
-    'end': '\033[0m',
-    'bold': '\033[1m',
-    'colors': {
-        'grey': '\033[30m',
-        'red': '\033[31m',
-        'green': '\033[32m',
-        'yellow': '\033[33m',
-        'blue': '\033[34m',
-        'magenta': '\033[35m',
-        'cyan': '\033[36m',
-    }
+codes = {
+    'reset': 0,
+    'bold': 1,
+    'grey': 30,
+    'red': 31,
+    'green': 32,
+    'yellow': 33,
+    'blue': 34,
+    'magenta': 35,
+    'cyan': 36,
 }
 
 
-def wrap(text, effect):
-    effect_code = effect_codes['colors'].get(effect,
-                                             effect_codes.get(effect, ''))
-    return "{start}{text}{end}".format(start=effect_code,
+def escape(*effect):
+    return "\x1b[{}m".format(';'.join([str(codes.get(e, 0)) for e in effect]))
+
+
+def apply(text, *effect):
+    return "{start}{text}{end}".format(start=escape(*effect),
                                        text=text,
-                                       end=effect_codes['end'])
+                                       end=escape('reset'))
 
 
 def get_ext_color(ext):
