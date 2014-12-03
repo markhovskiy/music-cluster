@@ -17,9 +17,9 @@ def escape(*effect):
 
 
 def apply(text, *effect):
-    return "{start}{text}{end}".format(start=escape(*effect),
-                                       text=text,
-                                       end=escape('reset'))
+    return u"{start}{text}{end}".format(start=escape(*effect),
+                                        text=text,
+                                        end=escape('reset'))
 
 
 def get_ext_color(ext):

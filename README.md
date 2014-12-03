@@ -14,7 +14,7 @@ a cli utility for dealing with local music collections
 ### testing
 
 ```bash
-py.test
+py.test utils/tests/
 
 ```
 

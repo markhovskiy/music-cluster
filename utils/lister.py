@@ -48,7 +48,7 @@ class Lister:
     def __init__(self, to_disable_effects, to_print_tags):
         self.effects_enabled = not to_disable_effects
         self.to_print_tags = to_print_tags
-        self.tag_separator = self.highlight(" | ", 'grey')
+        self.tag_separator = self.highlight(u" \u2758 ", 'grey')
 
     def list(self, dir_path, offset=0, depth=None):
         """
@@ -68,7 +68,8 @@ class Lister:
 
             if os.path.isdir(file_path):
                 self.print_offset(offset)
-                print(self.highlight(file_name, 'bold'))
+                print(self.highlight(unicode(file_name, 'utf-8'),
+                                     'bold'))
 
                 self.list(file_path,
                           offset + 1,
@@ -122,5 +123,5 @@ class Lister:
                 print(u"{0:{1}{2}}".format(tag, align, width),
                       end=self.tag_separator)
 
-        print(self.highlight(file_data['name'],
+        print(self.highlight(unicode(file_data['name'], 'utf-8'),
                              effects.get_ext_color(file_data['ext'])))
