@@ -44,11 +44,11 @@ e.g. `python list.py ~/Music/ -t` prints something like:
 - [x] print tree view of a folder (restrict depth, order subfiles by name)
 - [x] use colors for file types
 - [x] print tags table
+- [ ] print last.fm metadata (e.g. http://www.last.fm/api/show/album.getInfo)
 - [ ] add functionality for checking a file tree against tags (e.g. `"<artist>" -> "<year> - <album>" -> "<track number> - <title>.mp3"`)
 - [ ] introduce file-based configs for patterns, colors etc.
 - [ ] add renaming capabilities (by patterns)
 - [ ] add search capabilities
-- [ ] take advantage of last.fm stats (e.g. http://www.last.fm/api/show/track.getTags)
 
 
 ### links
