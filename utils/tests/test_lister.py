@@ -64,11 +64,11 @@ def test_max_tags_width():
 
 
 def test_highlight():
-    plain_lister = Lister(True, False)
+    plain_lister = Lister(to_disable_effects=True)
     assert plain_lister.highlight("text", 'red') == "text"
     assert plain_lister.highlight(u" \u2758 ", 'red') == u" ❘ "
 
-    colored_lister = Lister(False, False)
+    colored_lister = Lister(to_disable_effects=False)
     assert colored_lister.highlight("text",
                                     'red') == "\x1b[31mtext\x1b[0m"
     assert colored_lister.highlight(u" \u2758 ",

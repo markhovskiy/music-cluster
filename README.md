@@ -22,7 +22,7 @@ py.test utils/tests/
 ### usage
 
 ``` bash
-python list.py [-h] [-t] [-p] [-d DEPTH] path
+python list.py [-h] [-t] [-p] [-v] [-d DEPTH] path
 
 positional arguments:
   path                  path to list in
@@ -31,6 +31,7 @@ optional arguments:
   -h, --help            show this help message and exit
   -t, --tags            whether to print tags
   -p, --plain           plain text mode, effects disabled (colors, bold)
+  -v, --validate        highlights mismatches in filenames based on tags
   -d DEPTH, --depth DEPTH
                         restricts level of subfolders
 
@@ -44,8 +45,8 @@ e.g. `python list.py ~/Music/ -t` prints something like:
 - [x] print tree view of a folder (restrict depth, order subfiles by name)
 - [x] use colors for file types
 - [x] print tags table
+- [x] validate file name against tags (`"<track number> - <title>.mp3"`)
 - [ ] print last.fm metadata (e.g. http://www.last.fm/api/show/album.getInfo)
-- [ ] add functionality for checking a file tree against tags (e.g. `"<artist>" -> "<year> - <album>" -> "<track number> - <title>.mp3"`)
 - [ ] introduce file-based configs for patterns, colors etc.
 - [ ] add renaming capabilities (by patterns)
 - [ ] add search capabilities

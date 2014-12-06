@@ -45,9 +45,33 @@ class Lister:
 
         return tags_width
 
-    def __init__(self, to_disable_effects, to_print_tags):
+    @staticmethod
+    def is_filename_valid(file_data):
+        if file_data['ext'] != 'mp3':
+            return True
+
+        if 'tags' not in file_data:
+            return True
+
+        track_number = file_data['tags'].get('TRCK', '')
+        if len(track_number) == 1:
+            track_number = "0{0}".format(track_number)
+
+        title = file_data['tags'].get('TIT2', '')
+
+        valid_filename = u"{0} - {1}.{2}".format(track_number,
+                                                 title,
+                                                 file_data['ext'])
+
+        return unicode(file_data['name'], 'utf-8') == valid_filename
+
+    def __init__(self,
+                 to_disable_effects=False,
+                 to_print_tags=False,
+                 to_validate=False):
         self.effects_enabled = not to_disable_effects
         self.to_print_tags = to_print_tags
+        self.to_validate = to_validate
         self.tag_separator = self.highlight(u" \u2758 ", 'grey')
 
     def list(self, dir_path, offset=0, depth=None):
@@ -91,6 +115,11 @@ class Lister:
     def highlight(self, text, *effect):
         return effects.apply(text, *effect) if self.effects_enabled else text
 
+    def get_filename_color(self, file_data):
+        if self.to_validate and self.is_filename_valid(file_data):
+            return 'green'
+        return effects.get_ext_color(file_data['ext'])
+
     def collect_file_tags(self, file_path):
         audio = MP3(file_path)
         tags = {}
@@ -124,4 +153,4 @@ class Lister:
                       end=self.tag_separator)
 
         print(self.highlight(unicode(file_data['name'], 'utf-8'),
-                             effects.get_ext_color(file_data['ext'])))
+                             self.get_filename_color(file_data)))
