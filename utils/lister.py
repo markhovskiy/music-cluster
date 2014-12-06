@@ -1,11 +1,11 @@
 from __future__ import print_function
-import math
 import os
 import re
 
 from mutagen.mp3 import MP3
 
 import effects
+import formatters
 
 
 class Lister:
@@ -21,14 +21,6 @@ class Lister:
         'TRCK',  # track number
         'TIT2',  # title
     )
-
-    @staticmethod
-    def format_duration(duration):
-        mins = "{0:.0f}".format(math.floor(duration / 60))
-        secs = "{0:.0f}".format(math.floor(duration % 60))
-        if len(secs) == 1:
-            secs = "0{0}".format(secs)
-        return "{0}:{1}".format(mins, secs)
 
     @staticmethod
     def max_tags_width(files):
@@ -54,14 +46,11 @@ class Lister:
             return True
 
         track_number = file_data['tags'].get('TRCK', '')
-        if len(track_number) == 1:
-            track_number = "0{0}".format(track_number)
-
         title = file_data['tags'].get('TIT2', '')
 
-        valid_filename = u"{0} - {1}.{2}".format(track_number,
-                                                 title,
-                                                 file_data['ext'])
+        valid_filename = u"{:0>2} - {}.{}".format(track_number,
+                                                  title,
+                                                  file_data['ext'])
 
         return unicode(file_data['name'], 'utf-8') == valid_filename
 
@@ -99,10 +88,15 @@ class Lister:
                           offset + 1,
                           None if depth is None else (depth - 1))
             else:
-                file_ext = os.path.splitext(file_name)[1][1:].lower()
-                file_data = dict(name=file_name, ext=file_ext)
+                # __TODO: introduce a "FileData" class
+                #         with "name", "ext", "tags" as instance properties
+                #         and "is_name_valid()" as instance method
+                file_data = {
+                    'name': file_name,
+                    'ext': os.path.splitext(file_name)[1][1:].lower()
+                }
 
-                if self.to_print_tags and file_ext == 'mp3':
+                if self.to_print_tags and file_data['ext'] == 'mp3':
                     file_data['tags'] = self.collect_file_tags(file_path)
 
                 files.append(file_data)
@@ -116,8 +110,11 @@ class Lister:
         return effects.apply(text, *effect) if self.effects_enabled else text
 
     def get_filename_color(self, file_data):
-        if self.to_validate and self.is_filename_valid(file_data):
+        if (self.to_validate
+                and file_data['ext'] == 'mp3'
+                and self.is_filename_valid(file_data)):
             return 'green'
+
         return effects.get_ext_color(file_data['ext'])
 
     def collect_file_tags(self, file_path):
@@ -136,7 +133,7 @@ class Lister:
 
                 tags[frame] = tag
 
-        tags['duration'] = self.format_duration(audio.info.length)
+        tags['duration'] = formatters.to_time_str(audio.info.length)
 
         return tags
 
