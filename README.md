@@ -1,5 +1,7 @@
 # music-cluster
 
+[![Build Status](https://api.travis-ci.org/markhovskiy/music-cluster.svg)](https://travis-ci.org/markhovskiy/music-cluster)
+
 a cli utility for dealing with local music collections
 
 
