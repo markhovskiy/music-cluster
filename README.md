@@ -38,7 +38,7 @@ optional arguments:
                         restricts level of subfolders
 
 ```
-e.g. `python list.py ~/Music/ -t` prints something like:
+e.g. `python list.py -t -v ~/Music/` prints something like:
 ![screenshot](https://raw.githubusercontent.com/markhovskiy/markhovskiy.github.io/master/uploads/music_cluster_screenshot.png)
 
 

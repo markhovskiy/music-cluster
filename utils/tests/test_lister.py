@@ -1,59 +1,55 @@
 # -*- coding: utf-8 -*-
-from utils.lister import Lister
+from utils.lister import FileData, Lister
+
+
+def test_has_valid_name():
+    file_data_wrong = FileData('something.mp3')
+    file_data_wrong.tags = dict(TRCK='01',
+                                TIT2='another thing')
+    assert not file_data_wrong.has_valid_name()
+
+    file_data_correct = FileData('02 - Alaska.mp3')
+    file_data_correct.tags = dict(TRCK='02',
+                                  TIT2='Alaska')
+    assert file_data_correct.has_valid_name()
 
 
 def test_max_tags_width():
-    files = [
-        {
-            'name': '01 - The Moor.mp3',
-            'ext': 'mp3',
-            'tags': {
-                'TPE1': 'Opeth',
-                'TDRC': '1999',
-                'TALB': 'Still Life',
-                'TCON': 'Progressive Metal',
-                'TRCK': '1',
-                'TIT2': 'The Moor',
-                'duration': '11:24'
-            }
-        },
-        {
-            'name': '10 - From So Far Away.mp3',
-            'ext': 'mp3',
-            'tags': {
-                'TPE1': 'All Shall Perish',
-                'TDRC': '2008',
-                'TALB': 'Awaken the Dreamers',
-                'TCON': 'Deathcore',
-                'TRCK': '10',
-                'TIT2': 'From So Far Away',
-                'duration': '2:38'
-            }
-        },
-        {
-            'name': '11 - Дзеці паўночнага ветру.mp3',
-            'ext': 'mp3',
-            'tags': {
-                'TPE1': 'Rokash',
-                'TDRC': '2011',
-                'TALB': u'Запалі Агонь',
-                'TCON': 'Folk',
-                'TRCK': '11',
-                'TIT2': u'Дзеці паўночнага ветру',
-                'duration': '5:11'
-            }
-        }
-    ]
+    file_data_0 = FileData('01 - The Moor.mp3')
+    file_data_0.tags = dict(TPE1='Opeth',
+                            TDRC='1999',
+                            TALB='Still Life',
+                            TCON='Progressive Metal',
+                            TRCK='1',
+                            TIT2='The Moor',
+                            duration='11:24')
 
-    assert Lister.max_tags_width(files) == {
-        'TPE1': 16,
-        'TDRC': 4,
-        'TALB': 19,
-        'TCON': 17,
-        'TRCK': 2,
-        'TIT2': 22,
-        'duration': 5
-    }
+    file_data_1 = FileData('10 - From So Far Away.mp3')
+    file_data_1.tags = dict(TPE1='All Shall Perish',
+                            TDRC='2008',
+                            TALB='Awaken the Dreamers',
+                            TCON='Deathcore',
+                            TRCK='10',
+                            TIT2='From So Far Away',
+                            duration='2:38')
+
+    file_data_2 = FileData('11 - Дзеці паўночнага ветру.mp3')
+    file_data_2.tags = dict(TPE1='Rokash',
+                            TDRC='2011',
+                            TALB=u'Запалі Агонь',
+                            TCON='Folk',
+                            TRCK='11',
+                            TIT2=u'Дзеці паўночнага ветру',
+                            duration='5:11')
+
+    files = [file_data_0, file_data_1, file_data_2]
+    assert Lister.max_tags_width(files) == dict(TPE1=16,
+                                                TDRC=4,
+                                                TALB=19,
+                                                TCON=17,
+                                                TRCK=2,
+                                                TIT2=22,
+                                                duration=5)
 
 
 def test_highlight():

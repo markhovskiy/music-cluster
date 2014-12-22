@@ -8,6 +8,32 @@ import effects
 import formatters
 
 
+class FileData:
+    def __init__(self, name):
+        self.name = name
+        self.ext = os.path.splitext(name)[1][1:].lower()
+        self.tags = {}
+
+    def is_mp3(self):
+        return self.ext == 'mp3'
+
+    def has_tags(self):
+        return len(self.tags) > 0
+
+    def has_valid_name(self):
+        if not self.is_mp3():
+            return True
+
+        if not self.has_tags():
+            return True
+
+        valid_filename = u"{:0>2} - {}.{}".format(self.tags.get('TRCK', ''),
+                                                  self.tags.get('TIT2', ''),
+                                                  self.ext)
+
+        return unicode(self.name, 'utf-8') == valid_filename
+
+
 class Lister:
     # number of spaces to indent (marking nesting)
     offset_width = 2
@@ -27,32 +53,15 @@ class Lister:
         tags_width = {}
 
         for file_data in files:
-            if 'tags' not in file_data:
+            if not file_data.has_tags():
                 continue
 
-            for frame, tag in file_data['tags'].iteritems():
+            for frame, tag in file_data.tags.iteritems():
                 width = len(tag)
                 if width > tags_width.get(frame, 0):
                     tags_width[frame] = width
 
         return tags_width
-
-    @staticmethod
-    def is_filename_valid(file_data):
-        if file_data['ext'] != 'mp3':
-            return True
-
-        if 'tags' not in file_data:
-            return True
-
-        track_number = file_data['tags'].get('TRCK', '')
-        title = file_data['tags'].get('TIT2', '')
-
-        valid_filename = u"{:0>2} - {}.{}".format(track_number,
-                                                  title,
-                                                  file_data['ext'])
-
-        return unicode(file_data['name'], 'utf-8') == valid_filename
 
     def __init__(self,
                  to_disable_effects=False,
@@ -86,18 +95,12 @@ class Lister:
 
                 self.list(file_path,
                           offset + 1,
-                          None if depth is None else (depth - 1))
+                          None if depth is None else depth - 1)
             else:
-                # __TODO: introduce a "FileData" class
-                #         with "name", "ext", "tags" as instance properties
-                #         and "is_name_valid()" as instance method
-                file_data = {
-                    'name': file_name,
-                    'ext': os.path.splitext(file_name)[1][1:].lower()
-                }
+                file_data = FileData(file_name)
 
-                if self.to_print_tags and file_data['ext'] == 'mp3':
-                    file_data['tags'] = self.collect_file_tags(file_path)
+                if self.to_print_tags and file_data.is_mp3():
+                    file_data.tags = self.collect_file_tags(file_path)
 
                 files.append(file_data)
 
@@ -111,11 +114,11 @@ class Lister:
 
     def get_filename_color(self, file_data):
         if (self.to_validate
-                and file_data['ext'] == 'mp3'
-                and self.is_filename_valid(file_data)):
+                and file_data.is_mp3()
+                and file_data.has_valid_name()):
             return 'green'
 
-        return effects.get_ext_color(file_data['ext'])
+        return effects.get_ext_color(file_data.ext)
 
     def collect_file_tags(self, file_path):
         audio = MP3(file_path)
@@ -141,13 +144,13 @@ class Lister:
         print(" " * self.offset_width * offset, end="")
 
     def print_file_data(self, file_data, tags_width):
-        if 'tags' in file_data:
+        if file_data.has_tags():
             for frame in self.tag_frames + ('duration',):
-                tag = file_data['tags'].get(frame, "")
+                tag = file_data.tags.get(frame, "")
                 align = '>' if frame in ('TRCK', 'duration') else '<'
                 width = tags_width.get(frame, 0)
                 print(u"{0:{1}{2}}".format(tag, align, width),
                       end=self.tag_separator)
 
-        print(self.highlight(unicode(file_data['name'], 'utf-8'),
+        print(self.highlight(unicode(file_data.name, 'utf-8'),
                              self.get_filename_color(file_data)))
