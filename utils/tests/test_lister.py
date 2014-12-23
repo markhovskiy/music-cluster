@@ -14,7 +14,7 @@ def test_has_valid_name():
     assert file_data_correct.has_valid_name()
 
 
-def test_max_tags_width():
+def test_max_tags_length():
     file_data_0 = FileData('01 - The Moor.mp3')
     file_data_0.tags = dict(TPE1='Opeth',
                             TDRC='1999',
@@ -43,13 +43,13 @@ def test_max_tags_width():
                             duration='5:11')
 
     files = [file_data_0, file_data_1, file_data_2]
-    assert Lister.max_tags_width(files) == dict(TPE1=16,
-                                                TDRC=4,
-                                                TALB=19,
-                                                TCON=17,
-                                                TRCK=2,
-                                                TIT2=22,
-                                                duration=5)
+    assert Lister.max_tags_length(files) == dict(TPE1=16,
+                                                 TDRC=4,
+                                                 TALB=19,
+                                                 TCON=17,
+                                                 TRCK=2,
+                                                 TIT2=22,
+                                                 duration=5)
 
 
 def test_highlight():
@@ -65,3 +65,20 @@ def test_highlight():
     assert colored_lister.highlight("text",
                                     'blue',
                                     'bold') == "\x1b[34;1mtext\x1b[0m"
+
+
+def test_print_file_data(capsys):
+    file_data = FileData('WLSTD.mp3')
+    file_data.tags = dict(TPE1='HIM',
+                          TDRC='2013',
+                          TALB='ToT',
+                          TCON='Rock',
+                          TRCK='12',
+                          TIT2='WLSTD',
+                          duration='4:12')
+
+    plain_lister = Lister(to_disable_effects=True)
+    plain_lister.print_file_data(file_data, {})
+
+    out, err = capsys.readouterr()
+    assert out == u"HIM ❘ 2013 ❘ ToT ❘ Rock ❘ 12 ❘ WLSTD ❘ 4:12 ❘ WLSTD.mp3\n"

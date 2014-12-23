@@ -33,7 +33,7 @@ optional arguments:
   -h, --help            show this help message and exit
   -t, --tags            whether to print tags
   -p, --plain           plain text mode, effects disabled (colors, bold)
-  -v, --validate        highlights mismatches in filenames based on tags
+  -v, --validate        if filename matches tags, paints it green
   -d DEPTH, --depth DEPTH
                         restricts level of subfolders
 

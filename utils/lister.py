@@ -21,12 +21,6 @@ class FileData:
         return len(self.tags) > 0
 
     def has_valid_name(self):
-        if not self.is_mp3():
-            return True
-
-        if not self.has_tags():
-            return True
-
         valid_filename = u"{:0>2} - {}.{}".format(self.tags.get('TRCK', ''),
                                                   self.tags.get('TIT2', ''),
                                                   self.ext)
@@ -36,7 +30,7 @@ class FileData:
 
 class Lister:
     # number of spaces to indent (marking nesting)
-    offset_width = 2
+    offset_length = 2
 
     # see http://id3.org/id3v2.4.0-frames
     tag_frames = (
@@ -49,19 +43,16 @@ class Lister:
     )
 
     @staticmethod
-    def max_tags_width(files):
-        tags_width = {}
+    def max_tags_length(files):
+        tags_length = {}
 
         for file_data in files:
-            if not file_data.has_tags():
-                continue
-
             for frame, tag in file_data.tags.iteritems():
-                width = len(tag)
-                if width > tags_width.get(frame, 0):
-                    tags_width[frame] = width
+                length = len(tag)
+                if length > tags_length.get(frame, 0):
+                    tags_length[frame] = length
 
-        return tags_width
+        return tags_length
 
     def __init__(self,
                  to_disable_effects=False,
@@ -104,10 +95,10 @@ class Lister:
 
                 files.append(file_data)
 
-        folder_tags_width = self.max_tags_width(files)
+        folder_tags_length = self.max_tags_length(files)
         for file_data in files:
             self.print_offset(offset)
-            self.print_file_data(file_data, folder_tags_width)
+            self.print_file_data(file_data, folder_tags_length)
 
     def highlight(self, text, *effect):
         return effects.apply(text, *effect) if self.effects_enabled else text
@@ -115,6 +106,7 @@ class Lister:
     def get_filename_color(self, file_data):
         if (self.to_validate
                 and file_data.is_mp3()
+                and file_data.has_tags()
                 and file_data.has_valid_name()):
             return 'green'
 
@@ -141,15 +133,15 @@ class Lister:
         return tags
 
     def print_offset(self, offset):
-        print(" " * self.offset_width * offset, end="")
+        print(" " * self.offset_length * offset, end="")
 
-    def print_file_data(self, file_data, tags_width):
+    def print_file_data(self, file_data, tags_length):
         if file_data.has_tags():
             for frame in self.tag_frames + ('duration',):
                 tag = file_data.tags.get(frame, "")
                 align = '>' if frame in ('TRCK', 'duration') else '<'
-                width = tags_width.get(frame, 0)
-                print(u"{0:{1}{2}}".format(tag, align, width),
+                length = tags_length.get(frame, 0)
+                print(u"{0:{1}{2}}".format(tag, align, length),
                       end=self.tag_separator)
 
         print(self.highlight(unicode(file_data.name, 'utf-8'),
