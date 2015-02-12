@@ -33,14 +33,12 @@ class Lister:
     offset_length = 2
 
     # see http://id3.org/id3v2.4.0-frames
-    tag_frames = (
-        'TPE1',  # artist
-        'TDRC',  # year
-        'TALB',  # album
-        'TCON',  # genre
-        'TRCK',  # track number
-        'TIT2',  # title
-    )
+    tag_frames = ('TPE1',  # artist
+                  'TDRC',  # year
+                  'TALB',  # album
+                  'TCON',  # genre
+                  'TRCK',  # track number
+                  'TIT2')  # title
 
     @staticmethod
     def max_tags_length(files):

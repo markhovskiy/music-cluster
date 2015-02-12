@@ -1,15 +1,13 @@
 # see http://en.wikipedia.org/wiki/ANSI_escape_code#Colors
-codes = {
-    'reset': 0,
-    'bold': 1,
-    'grey': 30,
-    'red': 31,
-    'green': 32,
-    'yellow': 33,
-    'blue': 34,
-    'magenta': 35,
-    'cyan': 36,
-}
+codes = {'reset': 0,
+         'bold': 1,
+         'grey': 30,
+         'red': 31,
+         'green': 32,
+         'yellow': 33,
+         'blue': 34,
+         'magenta': 35,
+         'cyan': 36}
 
 
 def escape(*effect):
