@@ -85,13 +85,15 @@ class Lister:
                 self.list(file_path,
                           offset + 1,
                           None if depth is None else depth - 1)
-            else:
-                file_data = FileData(file_name)
 
-                if self.to_print_tags and file_data.is_mp3():
-                    file_data.tags = self.collect_file_tags(file_path)
+                continue
 
-                files.append(file_data)
+            file_data = FileData(file_name)
+
+            if self.to_print_tags and file_data.is_mp3():
+                file_data.tags = self.collect_file_tags(file_path)
+
+            files.append(file_data)
 
         folder_tags_length = self.max_tags_length(files)
         for file_data in files:
@@ -99,13 +101,16 @@ class Lister:
             self.print_file_data(file_data, folder_tags_length)
 
     def highlight(self, text, *effect):
-        return effects.apply(text, *effect) if self.effects_enabled else text
+        if not self.effects_enabled:
+            return text
+
+        return effects.apply(text, *effect)
 
     def get_filename_color(self, file_data):
-        if (self.to_validate
-                and file_data.is_mp3()
-                and file_data.has_tags()
-                and file_data.has_valid_name()):
+        if (self.to_validate and
+                file_data.is_mp3() and
+                file_data.has_tags() and
+                file_data.has_valid_name()):
             return 'green'
 
         return effects.get_ext_color(file_data.ext)
@@ -115,16 +120,18 @@ class Lister:
         tags = {}
 
         for frame in self.tag_frames:
-            if frame in audio:
-                # e.g. "audio['TDRC']" has "ID3TimeStamp" type
-                tag = unicode(audio[frame].text[0])
+            if frame not in audio:
+                continue
 
-                # removing a "total" part (in case of "current/total" format)
-                # and leading zeros
-                if frame == 'TRCK':
-                    tag = re.sub('^0*|/.*', "", tag)
+            # e.g. "audio['TDRC']" has "ID3TimeStamp" type
+            tag = unicode(audio[frame].text[0])
 
-                tags[frame] = tag
+            # removing a "total" part (in case of "current/total" format)
+            # and leading zeros
+            if frame == 'TRCK':
+                tag = re.sub('^0*|/.*', "", tag)
+
+            tags[frame] = tag
 
         tags['duration'] = formatters.to_time_str(audio.info.length)
 
@@ -139,6 +146,7 @@ class Lister:
                 tag = file_data.tags.get(frame, "")
                 align = '>' if frame in ('TRCK', 'duration') else '<'
                 length = tags_length.get(frame, 0)
+
                 print(u"{0:{1}{2}}".format(tag, align, length),
                       end=self.tag_separator)
 
