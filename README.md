@@ -39,7 +39,7 @@ optional arguments:
 
 ```
 e.g. `python list.py -t -v ~/Music/` prints something like:
-![screenshot](https://raw.githubusercontent.com/markhovskiy/markhovskiy.github.io/master/uploads/music_cluster_screenshot.png)
+![screenshot](https://raw.githubusercontent.com/oleksmarkh/oleksmarkh.github.io/master/uploads/music_cluster_screenshot.png)
 
 
 ### features/todo
