@@ -91,7 +91,7 @@ class Lister:
             file_data = FileData(file_name)
 
             if self.to_print_tags and file_data.is_mp3():
-                file_data.tags = self.collect_file_tags(file_path)
+                file_data.tags = self.collect_file_tags(MP3(file_path))
 
             files.append(file_data)
 
@@ -101,41 +101,31 @@ class Lister:
             self.print_file_data(file_data, folder_tags_length)
 
     def highlight(self, text, *effect):
-        if not self.effects_enabled:
-            return text
-
-        return effects.apply(text, *effect)
+        return effects.apply(text, *effect) if self.effects_enabled else text
 
     def get_filename_color(self, file_data):
-        if (self.to_validate and
-                file_data.is_mp3() and
-                file_data.has_tags() and
-                file_data.has_valid_name()):
-            return 'green'
+        return 'green' if (all([self.to_validate,
+                                file_data.is_mp3(),
+                                file_data.has_tags(),
+                                file_data.has_valid_name()])) else \
+               effects.get_ext_color(file_data.ext)
 
-        return effects.get_ext_color(file_data.ext)
+    def collect_file_tags(self, audio):
+        return dict({frame: self.retrieve_tag(audio, frame)
+                     for frame in self.tag_frames
+                     if frame in audio},
+                    **{'duration': formatters.to_time_str(audio.info.length)})
 
-    def collect_file_tags(self, file_path):
-        audio = MP3(file_path)
-        tags = {}
+    def retrieve_tag(self, audio, frame):
+        # e.g. "audio['TDRC']" has "ID3TimeStamp" type
+        tag = unicode(audio[frame].text[0])
 
-        for frame in self.tag_frames:
-            if frame not in audio:
-                continue
+        # removing a "total" part (in case of "current/total" format)
+        # and leading zeros
+        if frame == 'TRCK':
+            tag = re.sub('^0*|/.*', "", tag)
 
-            # e.g. "audio['TDRC']" has "ID3TimeStamp" type
-            tag = unicode(audio[frame].text[0])
-
-            # removing a "total" part (in case of "current/total" format)
-            # and leading zeros
-            if frame == 'TRCK':
-                tag = re.sub('^0*|/.*', "", tag)
-
-            tags[frame] = tag
-
-        tags['duration'] = formatters.to_time_str(audio.info.length)
-
-        return tags
+        return tag
 
     def print_offset(self, offset):
         print(" " * self.offset_length * offset, end="")

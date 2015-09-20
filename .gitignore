@@ -1,3 +1,4 @@
 *.pyc
 *.sublime-*
 __pycache__
+.cache

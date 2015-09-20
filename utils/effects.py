@@ -11,7 +11,8 @@ codes = {'reset': 0,
 
 
 def escape(*effect):
-    return "\x1b[{}m".format(';'.join([str(codes.get(e, 0)) for e in effect]))
+    return "\x1b[{}m".format(';'.join([str(codes.get(e, 0))
+                                       for e in effect]))
 
 
 def apply(text, *effect):
