@@ -48,11 +48,7 @@ e.g. `python list.py -t -v ~/Music/` prints something like:
 - [x] use colors for file types
 - [x] print tags table
 - [x] validate file name against tags (`"<track number> - <title>.mp3"`)
-- [ ] extract **last.fm** data (e.g. http://www.last.fm/api/show/album.getInfo)
-- [ ] extract **soundcloud** data (see https://developers.soundcloud.com)
-- [ ] extract **spotify** data (see https://developer.spotify.com/web-api)
-- [ ] introduce file-based configs for patterns, colors etc.
-- [ ] add renaming capabilities (by patterns)
+- [ ] migrate to python3
 - [ ] add search capabilities
 
 
