@@ -1,9 +1,9 @@
 # music-cluster
-
-[![Build Status](https://api.travis-ci.org/oleksmarkh/music-cluster.svg)](https://travis-ci.org/oleksmarkh/music-cluster)
+  [![travis][travis-image]][travis-url]
+  [![license][license-image]][license-url]
+  ![code size][code-size-image]
 
 a cli utility for dealing with local music collections
-
 
 ### setup (dev)
 
@@ -12,14 +12,12 @@ a cli utility for dealing with local music collections
 3. `pip install -r requirements.txt`
 4. `workon music-cluster`
 
-
 ### testing
 
 ```bash
 py.test utils/tests/
 
 ```
-
 
 ### usage
 
@@ -36,11 +34,9 @@ optional arguments:
   -v, --validate        if filename matches tags, paints it green
   -d DEPTH, --depth DEPTH
                         restricts level of subfolders
-
 ```
 e.g. `python list.py -t -v ~/Music/` prints something like:
 ![screenshot](https://raw.githubusercontent.com/oleksmarkh/oleksmarkh.github.io/master/uploads/music_cluster_screenshot.png)
-
 
 ### features/todo
 
@@ -51,7 +47,12 @@ e.g. `python list.py -t -v ~/Music/` prints something like:
 - [ ] migrate to python3
 - [ ] add search capabilities
 
-
 ### links
 
 * http://mutagen.readthedocs.org/en/latest/api/id3.html
+
+[travis-image]: https://img.shields.io/travis/oleksmarkh/music-cluster/master.svg?style=flat-square
+[travis-url]: https://travis-ci.org/oleksmarkh/music-cluster
+[license-image]: https://img.shields.io/github/license/oleksmarkh/music-cluster.svg?style=flat-square
+[license-url]: https://github.com/oleksmarkh/music-cluster/blob/master/LICENSE
+[code-size-image]: https://img.shields.io/github/languages/code-size/oleksmarkh/music-cluster.svg?style=flat-square
