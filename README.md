@@ -1,22 +1,26 @@
 # music-cluster
-  [![travis][travis-image]][travis-url]
+
   [![license][license-image]][license-url]
+  [![travis][travis-image]][travis-url]
   ![code size][code-size-image]
 
-a cli utility for dealing with local music collections
+a CLI utility for dealing with local music collections
 
 ### setup (dev)
 
-1. [install "virtualenvwrapper"](http://virtualenvwrapper.readthedocs.org/en/latest/install.html#basic-installation)
-2. create virtualenv for python2.7 (because mutagen can't really parse tags on python3): `mkvirtualenv --python=/usr/bin/python2.7 music-cluster`
-3. `pip install -r requirements.txt`
-4. `workon music-cluster`
+Install the [`virtualenvwrapper`](http://virtualenvwrapper.readthedocs.org/en/latest/install.html#basic-installation) and create a virtualenv for python2.7 (because `mutagen` can't really parse tags on python3).
+
+```bash
+$ pip install virtualenvwrapper
+$ mkvirtualenv --python=/usr/bin/python2.7 music-cluster
+$ workon music-cluster
+$ pip install -r requirements.txt
+```
 
 ### testing
 
 ```bash
-py.test utils/tests/
-
+$ py.test utils/tests/
 ```
 
 ### usage
@@ -35,8 +39,9 @@ optional arguments:
   -d DEPTH, --depth DEPTH
                         restricts level of subfolders
 ```
+
 e.g. `python list.py -t -v ~/Music/` prints something like:
-![screenshot](https://raw.githubusercontent.com/oleksmarkh/oleksmarkh.github.io/master/uploads/music_cluster_screenshot.png)
+![screenshot](/screenshot.png)
 
 ### features/todo
 
@@ -51,8 +56,8 @@ e.g. `python list.py -t -v ~/Music/` prints something like:
 
 * http://mutagen.readthedocs.org/en/latest/api/id3.html
 
-[travis-image]: https://img.shields.io/travis/oleksmarkh/music-cluster/master.svg?style=flat-square
-[travis-url]: https://travis-ci.org/oleksmarkh/music-cluster
 [license-image]: https://img.shields.io/github/license/oleksmarkh/music-cluster.svg?style=flat-square
 [license-url]: https://github.com/oleksmarkh/music-cluster/blob/master/LICENSE
+[travis-image]: https://img.shields.io/travis/oleksmarkh/music-cluster/master.svg?style=flat-square
+[travis-url]: https://travis-ci.org/oleksmarkh/music-cluster
 [code-size-image]: https://img.shields.io/github/languages/code-size/oleksmarkh/music-cluster.svg?style=flat-square
