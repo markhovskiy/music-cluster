@@ -138,4 +138,5 @@ class Lister:
                 print(u"{0:{1}{2}}".format(tag, align, length),
                       end=self.tag_separator)
 
-        print(self.highlight(file_data.name, self.get_filename_color(file_data)))
+        print(self.highlight(file_data.name,
+                             self.get_filename_color(file_data)))
