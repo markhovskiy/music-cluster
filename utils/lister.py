@@ -1,11 +1,10 @@
-from __future__ import print_function
 import os
 import re
 
 from mutagen.mp3 import MP3
 
-import effects
-import formatters
+from utils import effects
+from utils import formatters
 
 
 class FileData:
@@ -21,11 +20,11 @@ class FileData:
         return len(self.tags) > 0
 
     def has_valid_name(self):
-        valid_filename = u"{:0>2} - {}.{}".format(self.tags.get('TRCK', ''),
+        valid_filename = r"{:0>2} - {}.{}".format(self.tags.get('TRCK', ''),
                                                   self.tags.get('TIT2', ''),
                                                   self.ext)
 
-        return unicode(self.name, 'utf-8') == valid_filename
+        return self.name == valid_filename
 
 
 class Lister:
@@ -45,7 +44,7 @@ class Lister:
         tags_length = {}
 
         for file_data in files:
-            for frame, tag in file_data.tags.iteritems():
+            for frame, tag in file_data.tags.items():
                 length = len(tag)
                 if length > tags_length.get(frame, 0):
                     tags_length[frame] = length
@@ -79,8 +78,7 @@ class Lister:
 
             if os.path.isdir(file_path):
                 self.print_offset(offset)
-                print(self.highlight(unicode(file_name, 'utf-8'),
-                                     'bold'))
+                print(self.highlight(file_name, 'bold'))
 
                 self.list(file_path,
                           offset + 1,
@@ -118,7 +116,7 @@ class Lister:
 
     def retrieve_tag(self, audio, frame):
         # e.g. "audio['TDRC']" has "ID3TimeStamp" type
-        tag = unicode(audio[frame].text[0])
+        tag = str(audio[frame].text[0])
 
         # removing a "total" part (in case of "current/total" format)
         # and leading zeros
@@ -140,5 +138,5 @@ class Lister:
                 print(u"{0:{1}{2}}".format(tag, align, length),
                       end=self.tag_separator)
 
-        print(self.highlight(unicode(file_data.name, 'utf-8'),
+        print(self.highlight(file_data.name,
                              self.get_filename_color(file_data)))

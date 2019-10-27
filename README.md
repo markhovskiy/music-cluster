@@ -8,12 +8,15 @@ a CLI utility for dealing with local music collections
 
 ### setup (dev)
 
-Install the [`virtualenvwrapper`](http://virtualenvwrapper.readthedocs.org/en/latest/install.html#basic-installation) and create a virtualenv for python2.7 (because `mutagen` can't really parse tags on python3).
+Install a [`virtual Python 3.7 environment`](https://virtualenv.pypa.io/en/latest/installation/) 
+and create a virtualenv for Python 3.7 (because one of the primary
+dependencies in requirements.txt, `mutagen` is dependent on Python 3.7).
 
 ```bash
-$ pip install virtualenvwrapper
-$ mkvirtualenv --python=/usr/bin/python2.7 music-cluster
-$ workon music-cluster
+$ cd music-cluster
+$ pip3 install virtualenv
+$ virtualenv --python=python3.7 music-cluster-env
+$ source music-cluster-env/bin/activate
 $ pip install -r requirements.txt
 ```
 
@@ -49,7 +52,7 @@ e.g. `python list.py -t -v ~/Music/` prints something like:
 - [x] use colors for file types
 - [x] print tags table
 - [x] validate file name against tags (`"<track number> - <title>.mp3"`)
-- [ ] migrate to python3
+- [x] migrate to python3
 - [ ] add search capabilities
 
 ### links
