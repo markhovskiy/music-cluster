@@ -5,8 +5,8 @@ python:
     - "3.7"
 
 install:
-    - pip install -r requirements.txt
+    - pip install -r ./requirements.txt
 
 script:
-    - pycodestyle --show-source .
-    - py.test utils/tests/
+    - pycodestyle --show-source ./list.py ./utils/
+    - py.test ./utils/tests/

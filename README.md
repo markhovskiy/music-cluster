@@ -6,29 +6,22 @@
 
 a CLI utility for dealing with local music collections
 
-### setup (dev)
+## Motivation/goals
 
-Install a [`virtual Python 3.7 environment`](https://virtualenv.pypa.io/en/latest/installation/) 
-and create a virtualenv for Python 3.7 (because one of the primary
-dependencies in requirements.txt, `mutagen` is dependent on Python 3.7).
+It aims to keep `*.mp3` files organized, providing read-only capabilities.
+For altering tags, more powerful tools could be used, e.g. [MusicBrainz Picard](https://picard.musicbrainz.org/).
+
+## Status
+
+*In progress* - you can use it, but it's not distributed as a package yet.
+
+## How does it look like?
+
+![screenshot](/screenshot.png)
+
+## How to run it?
 
 ```bash
-$ cd music-cluster
-$ pip3 install virtualenv
-$ virtualenv --python=python3.7 music-cluster-env
-$ source music-cluster-env/bin/activate
-$ pip install -r requirements.txt
-```
-
-### testing
-
-```bash
-$ py.test utils/tests/
-```
-
-### usage
-
-``` bash
 python list.py [-h] [-t] [-p] [-v] [-d DEPTH] path
 
 positional arguments:
@@ -43,21 +36,52 @@ optional arguments:
                         restricts level of subfolders
 ```
 
-e.g. `python list.py -t -v ~/Music/` prints something like:
-![screenshot](/screenshot.png)
+For example:
 
-### features/todo
+```bash
+$ python list.py -t -v ~/Music/
+```
 
-- [x] print tree view of a folder (restrict depth, order subfiles by name)
-- [x] use colors for file types
-- [x] print tags table
-- [x] validate file name against tags (`"<track number> - <title>.mp3"`)
-- [x] migrate to python3
-- [ ] add search capabilities
+## What makes it possible?
 
-### links
+### dev deps
 
-* http://mutagen.readthedocs.org/en/latest/api/id3.html
+* [`virtualenv`](https://virtualenv.pypa.io/) - environment isolation scripts
+* [`pycodestyle`](https://pycodestyle.readthedocs.io/) - a codestyle checker
+* [`pytest`](https://pytest.org/) - unit testing framework
+
+### deps
+
+* [Mutagen](https://mutagen.readthedocs.io/) - a tagging library
+
+## Development setup
+
+Create a [virtual Python 3.7 environment](https://virtualenv.pypa.io/), since Mutagen is dependent on Python 3.7.
+
+```bash
+# virtual environment
+$ pip3 install virtualenv
+$ virtualenv --python=python3.7 music-cluster-env
+$ source ./music-cluster-env/bin/activate
+
+# dependencies
+$ pip install -r ./requirements.txt
+
+# codestyle
+$ pycodestyle --show-source ./list.py ./utils/
+
+# unit tests
+$ py.test ./utils/tests/
+```
+
+## Further evolvement
+
+* Search.
+* More detailed stats.
+
+## Invitation for contributors
+
+PRs and bug reports are very welcome.
 
 [license-image]: https://img.shields.io/github/license/oleksmarkh/music-cluster.svg?style=flat-square
 [license-url]: https://github.com/oleksmarkh/music-cluster/blob/master/LICENSE
