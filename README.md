@@ -1,7 +1,6 @@
 # music-cluster
 
   [![license][license-image]][license-url]
-  [![travis][travis-image]][travis-url]
   ![code size][code-size-image]
 
 a CLI utility for dealing with local music collections
@@ -85,6 +84,4 @@ PRs and bug reports are very welcome.
 
 [license-image]: https://img.shields.io/github/license/oleksmarkh/music-cluster.svg?style=flat-square
 [license-url]: https://github.com/oleksmarkh/music-cluster/blob/master/LICENSE
-[travis-image]: https://img.shields.io/travis/oleksmarkh/music-cluster/master.svg?style=flat-square
-[travis-url]: https://travis-ci.org/oleksmarkh/music-cluster
 [code-size-image]: https://img.shields.io/github/languages/code-size/oleksmarkh/music-cluster.svg?style=flat-square
