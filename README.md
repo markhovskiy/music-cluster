@@ -3,23 +3,17 @@
   [![license][license-image]][license-url]
   ![code size][code-size-image]
 
-a CLI utility for dealing with local music collections
-
-## Motivation/goals
-
+A CLI utility for dealing with local music collections.
 It aims to keep `*.mp3` files organized, providing read-only capabilities.
 For altering tags, more powerful tools could be used, e.g. [MusicBrainz Picard](https://picard.musicbrainz.org/).
 
 ## Status
-
 *In progress* - you can use it, but it's not distributed as a package yet.
 
 ## How does it look like?
-
 ![screenshot](/screenshot.png)
 
 ## How to run it?
-
 ```bash
 python list.py [-h] [-t] [-p] [-v] [-d DEPTH] path
 
@@ -36,25 +30,20 @@ optional arguments:
 ```
 
 For example:
-
 ```bash
 $ python list.py -t -v ~/Music/
 ```
 
 ## What makes it possible?
-
 ### dev deps
-
 * [`virtualenv`](https://virtualenv.pypa.io/) - environment isolation scripts
 * [`pycodestyle`](https://pycodestyle.readthedocs.io/) - a codestyle checker
 * [`pytest`](https://pytest.org/) - unit testing framework
 
 ### deps
-
 * [Mutagen](https://mutagen.readthedocs.io/) - a tagging library
 
 ## Development setup
-
 Create a [virtual Python 3.7 environment](https://virtualenv.pypa.io/), since Mutagen is dependent on Python 3.7.
 
 ```bash
@@ -73,13 +62,7 @@ $ pycodestyle --show-source ./list.py ./utils/
 $ py.test ./utils/tests/
 ```
 
-## Further evolvement
-
-* Search.
-* More detailed stats.
-
 ## Invitation for contributors
-
 PRs and bug reports are very welcome.
 
 [license-image]: https://img.shields.io/github/license/oleksmarkh/music-cluster.svg?style=flat-square
